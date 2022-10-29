@@ -1,0 +1,2 @@
+gcc -static main.c game.c bcurve.c -g -I"include" -L"lib" -lSDL2 -lm -lmingw32 -mwindows -Wl,--dynamicbase -Wl, -Wl, -lm -ldinput8 -ldxguid -ldxerr8 -luser32 -lgdi32 -lwinmm -limm32 -lole32 -loleaut32 -lshell32 -lsetupapi -lversion -luuid -o bcurves.exe
+pause

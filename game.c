@@ -1,6 +1,11 @@
 #include "game.h"
 #include "resource.h"
 
+SDL_Rect *texPos;
+GameState gameState; //game state
+
+SDL_Texture *textures[512];
+
 SDL_Renderer *rend;
 int close;
 int dragging = 0;
@@ -19,11 +24,11 @@ SDL_Texture *r_loadTexture(char *name);
 void r_loadTextures();
 
 int cvsNum = 0;
-bCurve cvs[MAX_CURVES];
+bCurve cvs[MAX_CURVES]; //curves array
 
 void r_init(SDL_Renderer *r){
 	close = 1;
-    rend = r;
+	rend = r;
 	gameState = Menu;
 
 	SDL_SetRenderDrawBlendMode(rend,SDL_BLENDMODE_BLEND);
@@ -66,7 +71,8 @@ void r_drawCurves(){
 		if(cvs[i].p1.x == 0 && cvs[i].p1.y == 0) //empty curve
 			continue;
 
-		if((cvs[i].p1.x != cvs[i].h1.x && cvs[i].p1.y != cvs[i].h1.y) || (cvs[i].p2.x != cvs[i].h2.x && cvs[i].p2.y != cvs[i].h2.y))
+		//if the curve wasn't moved just draw a straight line, otherwise draw the bezier curve.
+		if((cvs[i].p1.x != cvs[i].h1.x || cvs[i].p1.y != cvs[i].h1.y) || (cvs[i].p2.x != cvs[i].h2.x || cvs[i].p2.y != cvs[i].h2.y))
 			drawBCurve(cvs[i],rend);
 		else{
 			SDL_RenderDrawLine(rend,cvs[i].p1.x,cvs[i].p1.y,cvs[i].p2.x,cvs[i].p2.y);
@@ -139,8 +145,7 @@ void g_getInput(){
 				close = 0;
 			break;
 			case SDL_WINDOWEVENT:
-				if(event.window.event == SDL_WINDOWEVENT_RESIZED)
-					close = 2;
+
 			break;
 			case SDL_MOUSEBUTTONDOWN:
 
@@ -261,7 +266,6 @@ int insideOf(Vec p,Vec r1,Vec r2){
 
 void scaleCoords(int* x,int* y){
 
-
 	//scales coordinates
 	int nx,ny;
 	nx = texPos->w+texPos->x*2;
@@ -278,7 +282,6 @@ void scaleCoords(int* x,int* y){
 	*y -= texPos->y;
 	*x = *x / winScale;
 	*y = *y / winScale;
-
 
 }
 

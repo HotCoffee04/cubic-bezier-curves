@@ -1,8 +1,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#define SDL_MAIN_HANDLED
 #include <SDL2/SDL.h>
-#include <Windows.h>
+
 
 #include "common.h"
 #include "game.h"
@@ -14,11 +15,11 @@ SDL_Rect texturePos;
 
 float winScale;
 
-int APIENTRY WinMain(HINSTANCE h, HINSTANCE h2, LPSTR l, int i){
+int main(int argc, char* argv[]){
 
 	SDL_Init(SDL_INIT_VIDEO);
 
-	win  = SDL_CreateWindow("Bezier Curves",SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED,SCREENWIDTH*2,SCREENHEIGHT*2,SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
+	win  = SDL_CreateWindow("Bezier Curves",SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED,SCREENWIDTH,SCREENHEIGHT,SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
 
 	//cycle through all the renderers and find OpenGL
 	SDL_Renderer* rend = 0;
@@ -58,13 +59,12 @@ int APIENTRY WinMain(HINSTANCE h, HINSTANCE h2, LPSTR l, int i){
 		g_getInput();
 
 		switch(g_logic()){
+			
 			case 0:
 				close = 1;
 				break;
-			case 2:
-				resizedWindow();
-			break;
 		}
+		resizedWindow(); //every frame update render texture coordinates
 
 		r_renderToTexture(renderTexture);
 
@@ -84,6 +84,8 @@ int APIENTRY WinMain(HINSTANCE h, HINSTANCE h2, LPSTR l, int i){
 
 void resizedWindow(){
 
+	//adjust render texture scale and position to 
+	//properly fit in the window.
 	int nx,ny;
 	SDL_GetWindowSize(win,&nx,&ny);
 	int sx,sy;

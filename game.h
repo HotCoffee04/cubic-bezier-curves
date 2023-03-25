@@ -16,10 +16,10 @@ typedef enum TextureIndex{
 
 }TextureIndex;
 
-SDL_Rect *texPos;
-GameState gameState; //game state
+extern SDL_Rect *texPos;
+extern GameState gameState; //game state
 
-SDL_Texture *textures[512];
+extern SDL_Texture *textures[512];
 
 void r_init(SDL_Renderer *rend);
 void g_getInput();
